@@ -40,7 +40,7 @@ func main() {
 }
 
 func greetUsers(){
-	fmt.Printf("Welcome to %v ticket booking app\n", conferenceName)
+	fmt.Printf("Hello! Welcome to %v ticket booking app\n", conferenceName)
 	fmt.Printf("conferenceTickets is %T, remainingTickets is %T, conferenceName is %T\n", conferenceTickets, conferenceTickets, conferenceName)
 	fmt.Printf("We have a total of %v tickets and %v are avialable...\n", conferenceTickets, remainingTickets)
 	fmt.Println("Get your tickets here!!")
