@@ -1,12 +1,15 @@
 package main
-import ("fmt" 
-		"strings"
-		"github.com/Ashutosh-Chauhan93/booking-app/helper")
+
+import (
+	"fmt"
+	"strconv"
+	"github.com/Ashutosh-Chauhan93/booking-app/helper"
+)
 
 var conferenceName = "Go Conference"
 var conferenceTickets uint = 50
 var remainingTickets uint = 50
-var bookings = []string{}
+var bookings = make([]map[string]string, 0)
 
 func main() {
 
@@ -15,14 +18,8 @@ func main() {
 	for {
 		firstName, lastName, userEmail, userTickets := enterUserInput()
 		if helper.ValidateUserInput(firstName, lastName, userEmail, userTickets, remainingTickets){
-			remainingTickets = remainingTickets - userTickets
-
-			bookings = append(bookings, firstName+ " " +lastName)
-
-			fmt.Printf("Thank you User %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, userTickets, userEmail)
-			fmt.Printf("%v tickets remaining\n", remainingTickets)
-
-			firstNames := getFirstNames(bookings)
+			bookTickets(firstName, lastName, userEmail, userTickets)
+			firstNames := getFirstNames()
 			fmt.Printf("These first names of bookings are %v\n", firstNames)
 			
 			var noticketsremaining bool = remainingTickets == 0
@@ -46,12 +43,11 @@ func greetUsers(){
 	fmt.Println("Get your tickets here!!")
 }
 
-func getFirstNames(bookings []string) []string{
+func getFirstNames() []string{
 	firstNames := []string{}
 
 	for _, booking := range bookings{
-		var names = strings.Fields(booking)
-		firstNames = append(firstNames, names[0])
+		firstNames = append(firstNames, booking["firstName"])
 	}
 	return firstNames
 }
@@ -76,4 +72,21 @@ func enterUserInput() (string, string, string, uint){
 	fmt.Scan(&userTickets)
 
 	return firstName, lastName, userEmail, userTickets
+}
+
+func bookTickets(firstName string, lastName string, userEmail string, userTickets uint){
+	remainingTickets = remainingTickets - userTickets
+
+	var userData = make(map[string]string)
+	userData["firstName"] = firstName
+	userData["lastName"] = lastName
+	userData["userEmail"] = userEmail
+	userData["userTickets"] = strconv.FormatUint(uint64(userTickets), 10)
+
+	bookings = append(bookings, userData)
+	fmt.Printf("List of bookings is %v\n", bookings)
+
+	fmt.Printf("Thank you User %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, userTickets, userEmail)
+	fmt.Printf("%v tickets remaining\n", remainingTickets)
+
 }
